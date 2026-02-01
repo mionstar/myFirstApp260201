@@ -46,6 +46,7 @@
     <div id="stars"></div>
     <div class="container">
         <span>hello </span><span id="day"></span><span> </span><span id="time"></span>
+        <div id="remaining" style="margin-top: 1rem; font-size: 1.5rem;"></div>
     </div>
     <script>
         const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
@@ -71,15 +72,26 @@
             return hour >= 18 || hour < 6;
         }
 
+        function getRemainingDays() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const lastDay = new Date(year, month + 1, 0).getDate();
+            const today = now.getDate();
+            return lastDay - today;
+        }
+
         function updateTime() {
             const now = new Date();
             const dayOfWeek = now.getDay();
             const hour = now.getHours();
             const dayStr = days[dayOfWeek];
             const timeStr = now.toLocaleTimeString('ja-JP');
+            const remaining = getRemainingDays();
 
             document.getElementById('day').textContent = dayStr;
             document.getElementById('time').textContent = timeStr;
+            document.getElementById('remaining').textContent = `月末まであと ${remaining} 日`;
 
             if (isNightTime(hour)) {
                 document.body.style.backgroundColor = '#0a0a2e';
