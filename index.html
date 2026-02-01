@@ -47,6 +47,7 @@
     <div class="container">
         <span>hello </span><span id="day"></span><span> </span><span id="time"></span>
         <div id="remaining" style="margin-top: 1rem; font-size: 1.5rem;"></div>
+        <div id="birthday" style="margin-top: 0.5rem; font-size: 1.2rem;"></div>
     </div>
     <script>
         const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
@@ -81,6 +82,20 @@
             return lastDay - today;
         }
 
+        function getBirthdayCountdown() {
+            const now = new Date();
+            let birthday = new Date(now.getFullYear(), 11, 15); // 12月15日
+            if (now > birthday) {
+                birthday = new Date(now.getFullYear() + 1, 11, 15);
+            }
+            const diff = birthday - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            return { days, hours, minutes, seconds };
+        }
+
         function updateTime() {
             const now = new Date();
             const dayOfWeek = now.getDay();
@@ -89,9 +104,12 @@
             const timeStr = now.toLocaleTimeString('ja-JP');
             const remaining = getRemainingDays();
 
+            const birthday = getBirthdayCountdown();
+
             document.getElementById('day').textContent = dayStr;
             document.getElementById('time').textContent = timeStr;
             document.getElementById('remaining').textContent = `月末まであと ${remaining} 日`;
+            document.getElementById('birthday').textContent = `🎂 誕生日まであと ${birthday.days}日 ${birthday.hours}時間 ${birthday.minutes}分 ${birthday.seconds}秒`;
 
             if (isNightTime(hour)) {
                 document.body.style.backgroundColor = '#0a0a2e';
