@@ -46,6 +46,7 @@
     <div id="stars"></div>
     <div class="container">
         <span>hello </span><span id="day"></span><span> </span><span id="time"></span>
+        <div id="year-end" style="margin-top: 1rem; font-size: 1.5rem;"></div>
     </div>
     <script>
         const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
@@ -71,6 +72,13 @@
             return hour >= 18 || hour < 6;
         }
 
+        function getYearEndDays() {
+            const now = new Date();
+            const yearEnd = new Date(now.getFullYear(), 11, 31);
+            const diff = Math.ceil((yearEnd - now) / (1000 * 60 * 60 * 24));
+            return diff;
+        }
+
         function updateTime() {
             const now = new Date();
             const dayOfWeek = now.getDay();
@@ -78,8 +86,11 @@
             const dayStr = days[dayOfWeek];
             const timeStr = now.toLocaleTimeString('ja-JP');
 
+            const yearEndDays = getYearEndDays();
+
             document.getElementById('day').textContent = dayStr;
             document.getElementById('time').textContent = timeStr;
+            document.getElementById('year-end').textContent = `年末まであと ${yearEndDays} 日`;
 
             if (isNightTime(hour)) {
                 document.body.style.backgroundColor = '#0a0a2e';
